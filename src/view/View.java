@@ -43,8 +43,14 @@ public class View {
                             }
                         } else {
                             int id = Integer.parseInt(userInput);
-                            this.itemsList = controller.enterItem(id);
-                            controller.setRegistryMoney();
+                            ArrayList<ReceiptItemsDTO> theItemList = controller.enterItem(id);
+                            if(!(theItemList == null)) {
+                                //this.itemsList = controller.enterItem(id);
+                                this.itemsList = theItemList;
+                                controller.setRegistryMoney();
+                            }else{
+                                System.out.println("The item was not found in the stock!");
+                            }
                         }
                     } catch (IOException e) {
                         e.printStackTrace();

@@ -47,8 +47,10 @@ public class Controller {
      */
     public ArrayList<ReceiptItemsDTO> enterItem(int i){
         if(InventorySystem.itemInfo(i) == null) {
-            System.out.println("this item is not found in the stock");
-            return new ArrayList<>();
+            //System.out.println("this item is not found in the stock");
+            return null;
+            //Sale sale = new Sale();
+            //return sale.addItemsToListAndCalculatePrice(receiptItemsDTOS,receiptItemsDTO,itemInfo, receipt);
         }else {
         ItemDTO itemInfo = InventorySystem.itemInfo(i);
         this.itemInfo = InventorySystem.itemInfo(i);
