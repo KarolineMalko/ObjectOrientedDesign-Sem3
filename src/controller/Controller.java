@@ -16,7 +16,8 @@ import java.util.ArrayList;
  * the controller class is responsible for making all the connection between the view class all all other model classes.
  */
 public class Controller {
-    Receipt receipt = new Receipt();
+    String storeName = "Sky Supermarket  \nStorgatan 3 \n15435 Stockholm ";
+
     Registry registry = new Registry();
     ItemDTO itemInfo;
     LocalDateTime now = LocalDateTime.now();
@@ -25,10 +26,13 @@ public class Controller {
     public ArrayList<ItemDTO> itemsList = new ArrayList<>();
     public ArrayList<ReceiptItemsDTO> receiptItemsDTOS = new ArrayList<>();
     public ReceiptItemsDTO receiptItemsDTO;
+    public Receipt receipt;
     public ReceiptDTO receiptDTO;
     public int price = 0;
     public int changeToBeReturned = 0;
     int amountPayment;
+    //Receipt receipt = new Receipt(storeName,receiptItemsDTO,timeOfPurchase , totalPrice, payedCash, returnChange);
+
 
 
     public Controller(){
@@ -58,7 +62,7 @@ public class Controller {
         ItemDTO itemInfo = InventorySystem.itemInfo(i);
         this.itemInfo = InventorySystem.itemInfo(i);
         Sale sale = new Sale();
-        return sale.addItemsToListAndCalculatePrice(receiptItemsDTOS,receiptItemsDTO,itemInfo, receipt);}
+        return sale.addItemsToListAndCalculatePrice(receiptItemsDTOS, itemInfo, receipt);}
     }
 
 
@@ -71,33 +75,37 @@ public class Controller {
     public ReceiptDTO createReceiptAndShowPrice(ArrayList<ReceiptItemsDTO> receiptItemsDTOS){
         for (ReceiptItemsDTO itemsDTO : receiptItemsDTOS) {
 
-            price += itemsDTO.getPrice();
+            this.price += itemsDTO.getPrice();
         }
-        String storeName = "Sky Supermarket  \nStorgatan 3 \n15435 Stockholm ";
-        receiptDTO = receipt.createReceipt(storeName, receiptItemsDTOS, dateTimeString, price, amountPayment, changeToBeReturned);
-        this.receiptDTO = receiptDTO;
+
+        this.receipt = new Receipt(this.storeName, receiptItemsDTOS, dateTimeString, this.price, amountPayment, changeToBeReturned);
+        //this.receiptDTO = receiptDTO;
         System.out.println("Total price: " + price);
+        this.receiptDTO = this.receipt.returnReceiptDTO();
         return receiptDTO;
     }
 
     public void resetReceipt(){
-        LocalDateTime now = LocalDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        String dateTimeString = now.format(formatter);
-        ArrayList<ItemDTO> itemsList = new ArrayList<>();
-        ArrayList<ReceiptItemsDTO> receiptItemsDTOS = new ArrayList<>();
-        ReceiptItemsDTO receiptItemsDTO;
-        ReceiptDTO receiptDTO;
-        int price = 0;
-        int changeToBeReturned = 0;
-        int amountPayment;
+        this.now = LocalDateTime.now();
+        this.formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        this.dateTimeString = now.format(formatter);
+        this.itemsList = new ArrayList<>();
+        this.receiptItemsDTOS = new ArrayList<>();
+        //this.receiptItemsDTO = new ReceiptItemsDTO();
+        this.price = 0;
+        this.changeToBeReturned = 0;
+        this.amountPayment = 0;
+        this.receipt = new Receipt(this.storeName, this.receiptItemsDTOS,
+                this.dateTimeString, this.price,this.amountPayment, this.changeToBeReturned);
+        System.out.println("..");
     }
 
     /**
      * print the receipt on the screen
      */
     public void showReceipt(){
-        System.out.println("RECEIPT: \n \n" + ReceiptDTOToString(receiptDTO) );
+        //ReceiptDTO receiptDTO = this.receipt.returnReceiptDTO();
+        System.out.println("RECEIPT: \n \n" + ReceiptDTOToString(this.receiptDTO));
 
     }
 
@@ -111,10 +119,10 @@ public class Controller {
     public int pay(int amountPayment){
         this.amountPayment = amountPayment;
         if(amountPayment >= price) {
-            int totPrice = receiptDTO.getTotalPrice();
+            int totPrice = this.receiptDTO.getTotalPrice();
             Payment payment = new Payment(totPrice, amountPayment);
             changeToBeReturned = payment.calculateChange(totPrice, amountPayment);
-            receiptDTO.setPayedCash(amountPayment);
+            receipt.updatePayedCash(amountPayment);
             receiptDTO.setReturnedChange(changeToBeReturned);
             System.out.println(changeToBeReturned + "\n\n");
             return 1;

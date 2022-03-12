@@ -9,8 +9,12 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class Receipt {
-    public ArrayList<ReceiptDTO> receiptDTOS  = new ArrayList<>();
-
+    //public ArrayList<ReceiptDTO> receiptDTOS  = new ArrayList<>();
+    ReceiptDTO receiptDTO;
+    public Receipt(String storeName,ArrayList<ReceiptItemsDTO> receiptItemsDTO, String timeOfPurchase,
+                   int totalPrice, int payedCash, int returnChange){
+        this.receiptDTO = new ReceiptDTO(storeName,receiptItemsDTO,timeOfPurchase , totalPrice, payedCash, returnChange);
+    }
 
     /**
      * it is responsible for creating the receipt
@@ -22,9 +26,18 @@ public class Receipt {
      * @param returnChange      the change which will  be returned to the client.
      * @return                  the receiptDTO which contains the receipt info.
      */
-    public ReceiptDTO createReceipt(String storeName,ArrayList<ReceiptItemsDTO> receiptItemsDTO, String timeOfPurchase, int totalPrice, int payedCash, int returnChange){
+    /*public ReceiptDTO createReceipt(String storeName,ArrayList<ReceiptItemsDTO> receiptItemsDTO, String timeOfPurchase,
+                                    int totalPrice, int payedCash, int returnChange){
         ReceiptDTO receiptDTO = new ReceiptDTO(storeName,receiptItemsDTO,timeOfPurchase , totalPrice, payedCash, returnChange);
         return receiptDTO;
+    }*/
+
+    public ReceiptDTO returnReceiptDTO() {
+        return this.receiptDTO;
+    }
+
+    public void updatePayedCash(int payment) {
+        this.receiptDTO.setPayedCash(payment);
     }
 
 }

@@ -1,11 +1,8 @@
 package model;
 
 import DTO.ItemDTO;
-import DTO.ReceiptDTO;
 import DTO.ReceiptItemsDTO;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 public class Sale {
@@ -15,12 +12,12 @@ public class Sale {
      * if the current item is not on the list and if the current item is already in the list.
      *
      * @param receiptItemsDTOS
-     * @param receiptItemsDTO
      * @param itemInfo
      * @param receipt
      * @return it returns the list of the items and the info of them.
      */
-    public ArrayList<ReceiptItemsDTO> addItemsToListAndCalculatePrice(ArrayList<ReceiptItemsDTO> receiptItemsDTOS, ReceiptItemsDTO receiptItemsDTO, ItemDTO itemInfo, Receipt receipt){
+    public ArrayList<ReceiptItemsDTO> addItemsToListAndCalculatePrice(ArrayList<ReceiptItemsDTO> receiptItemsDTOS, ItemDTO itemInfo, Receipt receipt){
+        ReceiptItemsDTO receiptItemsDTO;
         if(receiptItemsDTOS.size() != 0) {
             if(!(checkIfItemAlreadyInReceipt(itemInfo,receiptItemsDTOS) == -1)){
                 int index = checkIfItemAlreadyInReceipt(itemInfo,receiptItemsDTOS);

@@ -5,6 +5,7 @@ public class ReceiptItemsDTO {
     int quantity;
     ItemDTO itemDTO;
 
+
     public void setPrice(int price) {
         this.price = price;
     }

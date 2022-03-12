@@ -17,7 +17,7 @@ public class View {
     //Controller controller;
     FileLogger fileLogger = new FileLogger();
     public ArrayList<ReceiptItemsDTO> itemsList = new ArrayList<>();
-    public ReceiptDTO receipt = new ReceiptDTO(itemsList);
+    //public ReceiptDTO receipt = new ReceiptDTO(itemsList);
 
     //private Object ExeptionForDatabase;
 
@@ -33,6 +33,7 @@ public class View {
                 //controller = new Controller();
                 //Controller controller1;
                 int i = 0;
+                controller.resetReceipt();
                 while (i == 0) {
                     //controller.resetReceipt();
                     InputStreamReader InReader = new InputStreamReader(System.in);
@@ -41,7 +42,7 @@ public class View {
                     try {
                         String userInput = br.readLine();
                         if (userInput.equals("No")) {
-                            this.receipt = controller.createReceiptAndShowPrice(itemsList);
+                            controller.createReceiptAndShowPrice(itemsList);
                             while (true) {
                                 System.out.println("Enter the amount payed: ");
                                 String userPayment = br.readLine();
@@ -56,7 +57,8 @@ public class View {
                                     break;
                                 }
                                 else {
-                                    throw new ExeptionForEnoughMoney("the payment is not enough for completing the sale process");
+                                    System.out.println("The payment is not enough for completing the sale process");
+                                    //throw new ExeptionForEnoughMoney("the payment is not enough for completing the sale process");
                                 }
                             }
                         } else {
@@ -72,8 +74,8 @@ public class View {
                     } /*catch (NumberFormatException e) {
                         System.out.println("try to enter a number");
                     }*/
-                    catch (IOException | ExeptionForDatabase | ExeptionForEnoughMoney | NumberFormatException e) {
-                        //e.printStackTrace();
+                    catch (IOException | ExeptionForDatabase | NumberFormatException e) {
+                        e.printStackTrace();
                         //fileLogger.logForUser(new Exception());
                         fileLogger.printMsgForUser("Try to enter a number not a character!");
                         //fileLogger.printMsgForDev((NumberFormatException) e);
