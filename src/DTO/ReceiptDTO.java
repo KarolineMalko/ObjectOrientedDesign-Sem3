@@ -11,6 +11,9 @@ public class ReceiptDTO {
     int payedCash;
     int returnedChange;
 
+    public ReceiptDTO(ArrayList<ReceiptItemsDTO> itemsList) {
+    }
+
     /*public ReceiptDTO(ArrayList<ItemDTO> itemDTOArrayList, LocalDateTime timeOfPurchase, int totalPrice){
         this.itemDTOArrayList = itemDTOArrayList;
         this.timeOfPurchase = timeOfPurchase;

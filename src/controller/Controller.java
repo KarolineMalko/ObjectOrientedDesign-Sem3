@@ -30,10 +30,16 @@ public class Controller {
     public int changeToBeReturned = 0;
     int amountPayment;
 
+
+    public Controller(){
+
+    }
+
+
     /**
      * this function run the function createItemList in the InventorySystem which creates the Item list of the store stock.
      */
-    public void startSale(){
+    public void runTheInventorySystem(){
         InventorySystem.createItemList();
 
     }
@@ -47,10 +53,7 @@ public class Controller {
      */
     public ArrayList<ReceiptItemsDTO> enterItem(int i){
         if(InventorySystem.itemInfo(i) == null) {
-            //System.out.println("this item is not found in the stock");
             return null;
-            //Sale sale = new Sale();
-            //return sale.addItemsToListAndCalculatePrice(receiptItemsDTOS,receiptItemsDTO,itemInfo, receipt);
         }else {
         ItemDTO itemInfo = InventorySystem.itemInfo(i);
         this.itemInfo = InventorySystem.itemInfo(i);
@@ -63,8 +66,9 @@ public class Controller {
      * this function add the price of every item to create the total price for the receipt.
      * it creates the receipt and adds the total price to it.
      * @param receiptItemsDTOS
+     * @return
      */
-    public void createReceiptAndShowPrice(ArrayList<ReceiptItemsDTO> receiptItemsDTOS){
+    public ReceiptDTO createReceiptAndShowPrice(ArrayList<ReceiptItemsDTO> receiptItemsDTOS){
         for (ReceiptItemsDTO itemsDTO : receiptItemsDTOS) {
 
             price += itemsDTO.getPrice();
@@ -73,6 +77,20 @@ public class Controller {
         receiptDTO = receipt.createReceipt(storeName, receiptItemsDTOS, dateTimeString, price, amountPayment, changeToBeReturned);
         this.receiptDTO = receiptDTO;
         System.out.println("Total price: " + price);
+        return receiptDTO;
+    }
+
+    public void resetReceipt(){
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String dateTimeString = now.format(formatter);
+        ArrayList<ItemDTO> itemsList = new ArrayList<>();
+        ArrayList<ReceiptItemsDTO> receiptItemsDTOS = new ArrayList<>();
+        ReceiptItemsDTO receiptItemsDTO;
+        ReceiptDTO receiptDTO;
+        int price = 0;
+        int changeToBeReturned = 0;
+        int amountPayment;
     }
 
     /**
@@ -102,7 +120,6 @@ public class Controller {
             return 1;
         }
         else {
-            System.out.println("the payed money is not enough for completing the sale process");
             return -1;
         }
     }
