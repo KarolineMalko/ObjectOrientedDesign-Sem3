@@ -31,6 +31,8 @@ public class Controller {
     public int price = 0;
     public int changeToBeReturned = 0;
     int amountPayment;
+    int updatedAmountInReg;
+    private ArrayList<RegisterObserver> observers;
     //Receipt receipt = new Receipt(storeName,receiptItemsDTO,timeOfPurchase , totalPrice, payedCash, returnChange);
 
 
@@ -55,14 +57,16 @@ public class Controller {
      * @param {int} i which is the item id which will be entered by the user
      * @return array list of receiptItemsDto.
      */
-    public ArrayList<ReceiptItemsDTO> enterItem(int i){
+    public ArrayList<ReceiptItemsDTO> enterItem(int i) throws ExceptionNotFountItem {
         if(InventorySystem.itemInfo(i) == null) {
-            return null;
+            throw new ExceptionNotFountItem("The item was not found in the stock!");
+            //return null;
         }else {
         ItemDTO itemInfo = InventorySystem.itemInfo(i);
         this.itemInfo = InventorySystem.itemInfo(i);
         Sale sale = new Sale();
         return sale.addItemsToListAndCalculatePrice(receiptItemsDTOS, itemInfo, receipt);}
+
     }
 
 
@@ -97,14 +101,14 @@ public class Controller {
         this.amountPayment = 0;
         this.receipt = new Receipt(this.storeName, this.receiptItemsDTOS,
                 this.dateTimeString, this.price,this.amountPayment, this.changeToBeReturned);
-        System.out.println("..");
+        emptyObservers();
+
     }
 
     /**
      * print the receipt on the screen
      */
     public void showReceipt(){
-        //ReceiptDTO receiptDTO = this.receipt.returnReceiptDTO();
         System.out.println("RECEIPT: \n \n" + ReceiptDTOToString(this.receiptDTO));
 
     }
@@ -144,12 +148,38 @@ public class Controller {
     /**
      *it adds the total price of the receipt to the amount money of the registry and it updates the registry with the new amount of
      * money.
+     * we notify the observer
      */
     public void updateRegAmount() {
-        int updatedAmountInReg = registry.getAmountMoneyInReg() + receiptDTO.getTotalPrice();
+        this.updatedAmountInReg = registry.getAmountMoneyInReg() + receiptDTO.getTotalPrice();
         registry.setRegistryAmount(updatedAmountInReg);
+        notifyObserver();
     }
 
+    /**
+     * this function go through all the observers and notify them about the changes.
+     */
+
+    private void notifyObserver(){
+        for(RegisterObserver obs : observers){
+            obs.newRegistryUpdate(this.updatedAmountInReg);
+        }
+    }
+
+    /**
+     * this function adds observer to the observers list.
+     * @param obs
+     */
+    public void addObserver (RegisterObserver obs){
+        observers.add(obs);
+    }
+
+    /**
+     * this function makes a new list of the observers so the observers are empty.
+     */
+    public void emptyObservers (){
+        this.observers = new ArrayList<>();
+    }
 
     /**
      * this function converts a receiptDTO to String

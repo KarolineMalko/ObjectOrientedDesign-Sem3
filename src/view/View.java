@@ -1,16 +1,14 @@
 package view;
 
-import DTO.ReceiptDTO;
 import DTO.ReceiptItemsDTO;
 import controller.Controller;
-import model.ExeptionForDatabase;
-import model.ExeptionForEnoughMoney;
+//import model.ExceptionForDatabase;
+import model.ExceptionNotFountItem;
 import model.FileLogger;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
 public class View {
@@ -38,7 +36,7 @@ public class View {
                     //controller.resetReceipt();
                     InputStreamReader InReader = new InputStreamReader(System.in);
                     BufferedReader br = new BufferedReader(InReader);
-                    System.out.println("Enter the item id: ");
+                    System.out.println("Enter the item id or (\"No\" if the customer doesn't want to buy anything else): " );
                     try {
                         String userInput = br.readLine();
                         if (userInput.equals("No")) {
@@ -46,55 +44,53 @@ public class View {
                             while (true) {
                                 System.out.println("Enter the amount payed: ");
                                 String userPayment = br.readLine();
-                                int payedMoney = Integer.parseInt(userPayment);
-                                if (controller.pay(payedMoney) == 1) {
-                                    controller.showReceipt();
-                                    controller.updateRegAmount();
-                                    //ArrayList<ReceiptItemsDTO> itemsList = new ArrayList<>();
-                                    //this.receipt = new ReceiptDTO(itemsList);
-                                    //this.receipt = controller.createReceiptAndShowPrice(itemsList);
-                                    i = 1;
-                                    break;
-                                }
-                                else {
-                                    System.out.println("The payment is not enough for completing the sale process");
-                                    //throw new ExeptionForEnoughMoney("the payment is not enough for completing the sale process");
+                                try {
+                                    int payedMoney = Integer.parseInt(userPayment);
+                                    if (controller.pay(payedMoney) == 1) {
+                                        controller.showReceipt();
+                                        controller.updateRegAmount();
+                                        i = 1;
+                                        break;
+                                    } else {
+                                        System.out.println("The payment is not enough for completing the sale process");
+                                    }
+                                }catch (Exception NumberFormatException){
+                                    fileLogger.printMsgForUser("Try to enter a number not a character!");
                                 }
                             }
                         } else {
                             int id = Integer.parseInt(userInput);
                             ArrayList<ReceiptItemsDTO> theItemList = controller.enterItem(id);
-                            if(theItemList == null) {
-                                throw new ExeptionForDatabase("");
-                            }else {
+                            //if(theItemList == null) {
+                                //throw new ExceptionNotFountItem("");
+                            //}else {
                                 this.itemsList = theItemList;
                                 controller.setRegistryMoney();
-                            }
+                            //}
                         }
-                    } /*catch (NumberFormatException e) {
-                        System.out.println("try to enter a number");
-                    }*/
-                    catch (IOException | ExeptionForDatabase | NumberFormatException e) {
-                        e.printStackTrace();
-                        //fileLogger.logForUser(new Exception());
-                        fileLogger.printMsgForUser("Try to enter a number not a character!");
-                        //fileLogger.printMsgForDev((NumberFormatException) e);
-                        //fileLogger.printMsgForDev(e);
-                        //fileLogger.printMsgForDev((ExeptionForDatabase) e);
+                    }
+                    /*catch (IOException e) {
+                        //e.printStackTrace();
+                        fileLogger.printMsgForDev(e);
 
-                    } catch (Exception e){
+                    }*/
+                    catch(ExceptionNotFountItem e){
+                        fileLogger.printMsgForUser(e.getMessage());
+                    }
+                    catch(NumberFormatException e){
+                        fileLogger.printMsgForUser("Try to enter a number not a character!");
+                    }
+                    catch (Exception e){
                         fileLogger.printMsgForDev(e);
                     }
+
 
                 }
 
             }
 
-        } catch (NumberFormatException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            fileLogger.printMsgForDev(e);
         }
-    }
-    public void logger(){
-
     }
 }
