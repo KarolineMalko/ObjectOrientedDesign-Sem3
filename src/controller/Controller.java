@@ -33,7 +33,6 @@ public class Controller {
     int amountPayment;
     int updatedAmountInReg;
     private ArrayList<RegisterObserver> observers;
-    //Receipt receipt = new Receipt(storeName,receiptItemsDTO,timeOfPurchase , totalPrice, payedCash, returnChange);
 
 
 
@@ -60,7 +59,6 @@ public class Controller {
     public ArrayList<ReceiptItemsDTO> enterItem(int i) throws ExceptionNotFountItem {
         if(InventorySystem.itemInfo(i) == null) {
             throw new ExceptionNotFountItem("The item was not found in the stock!");
-            //return null;
         }else {
         ItemDTO itemInfo = InventorySystem.itemInfo(i);
         this.itemInfo = InventorySystem.itemInfo(i);
@@ -74,19 +72,15 @@ public class Controller {
      * this function add the price of every item to create the total price for the receipt.
      * it creates the receipt and adds the total price to it.
      * @param receiptItemsDTOS
-     * @return
      */
-    public ReceiptDTO createReceiptAndShowPrice(ArrayList<ReceiptItemsDTO> receiptItemsDTOS){
+    public void createReceiptAndShowPrice(ArrayList<ReceiptItemsDTO> receiptItemsDTOS){
         for (ReceiptItemsDTO itemsDTO : receiptItemsDTOS) {
 
             this.price += itemsDTO.getPrice();
         }
-
-        this.receipt = new Receipt(this.storeName, receiptItemsDTOS, dateTimeString, this.price, amountPayment, changeToBeReturned);
-        //this.receiptDTO = receiptDTO;
+        this.receipt = new Receipt(this.storeName, receiptItemsDTOS, dateTimeString, this.price, amountPayment, changeToBeReturned);;
         System.out.println("Total price: " + price);
         this.receiptDTO = this.receipt.returnReceiptDTO();
-        return receiptDTO;
     }
 
     public void resetReceipt(){
@@ -95,7 +89,6 @@ public class Controller {
         this.dateTimeString = now.format(formatter);
         this.itemsList = new ArrayList<>();
         this.receiptItemsDTOS = new ArrayList<>();
-        //this.receiptItemsDTO = new ReceiptItemsDTO();
         this.price = 0;
         this.changeToBeReturned = 0;
         this.amountPayment = 0;
@@ -120,7 +113,7 @@ public class Controller {
      * @param {int} amountPayment which the user is paying
      * @return  the function return 1 if the the money is enough so the view can check it before printing the receipt.
      */
-    public int pay(int amountPayment){
+    public boolean pay(int amountPayment){
         this.amountPayment = amountPayment;
         if(amountPayment >= price) {
             int totPrice = this.receiptDTO.getTotalPrice();
@@ -129,10 +122,10 @@ public class Controller {
             receipt.updatePayedCash(amountPayment);
             receiptDTO.setReturnedChange(changeToBeReturned);
             System.out.println(changeToBeReturned + "\n\n");
-            return 1;
+            return true;
         }
         else {
-            return -1;
+            return false;
         }
     }
 
@@ -142,7 +135,6 @@ public class Controller {
      */
     public void setRegistryMoney(){
         registry.getAmountMoneyInReg();
-        //System.out.println(registry.getAmountMoneyInReg());
     }
 
     /**
@@ -231,8 +223,7 @@ public class Controller {
         sb.append(receiptDTO.getTimeOfPurchase());
         sb.append("\n");
 
-        //for(ItemDTO itemDTO:receiptDTO.itemsList()) {
-            for(ReceiptItemsDTO receiptItemsDTO: receiptDTO.getReceiptItemsDTO()){
+        for(ReceiptItemsDTO receiptItemsDTO: receiptDTO.getReceiptItemsDTO()){
             sb.append(receiptItemDtoToString(receiptItemsDTO));
         }
         sb.append("\n");

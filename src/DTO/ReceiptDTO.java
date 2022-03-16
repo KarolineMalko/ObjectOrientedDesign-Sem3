@@ -10,36 +10,21 @@ public class ReceiptDTO {
     int payedCash;
     int returnedChange;
 
-    /*public ReceiptDTO(ArrayList<ReceiptItemsDTO> itemsList) {
-
-        this.receiptItemsDTO = itemsList;
-    }*/
-
 
     public ReceiptDTO(String storeName, ArrayList<ReceiptItemsDTO> receiptItemsDTO, String timeOfPurchase, int totalPrice, int payedCash, int returnedChange){
-        //this.itemDTOArrayList = itemDTOArrayList;
         this.storeName = storeName;
         this.receiptItemsDTO = receiptItemsDTO;
-        //this.itemsList = itemsList;
         this.timeOfPurchase = timeOfPurchase;
         this.totalPrice = totalPrice;
         this.payedCash = payedCash;
         this.returnedChange = returnedChange;
 
     }
-    /*public ReceiptDTO(ArrayList<ItemDTO> itemDTOArrayList, LocalDateTime timeOfPurchase, int totalPrice){
-        this.itemDTOArrayList = itemDTOArrayList;
-        this.timeOfPurchase = timeOfPurchase;
-        this.totalPrice = totalPrice;
-    }*/
 
     public String getStoreName() {
         return storeName;
     }
 
-    public void setStoreName(String storeName) {
-        this.storeName = storeName;
-    }
 
     public void setPayedCash(int payedCash) {
         this.payedCash = payedCash;
@@ -51,13 +36,6 @@ public class ReceiptDTO {
         return payedCash;
     }
 
-    /*public ArrayList<ItemDTO> getItemDTOArrayList() {
-        return itemDTOArrayList;
-    }*/
-
-    /*public ArrayList<ItemDTO> itemsList() {
-        return itemsList;
-    }*/
 
     public ArrayList<ReceiptItemsDTO> getReceiptItemsDTO() {
         return receiptItemsDTO;

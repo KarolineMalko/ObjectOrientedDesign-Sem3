@@ -17,12 +17,6 @@ public class TotalRevenueViewRevenue implements RegisterObserver {
     @Override
     public void newRegistryUpdate(int updatedAmountInReg){
         registryUpdates.add(updatedAmountInReg);
-        print();
-    //public void update(Observable o, Object arg) {
 
-    }
-    public void print(){
-        int numberOfUpdates = registryUpdates.size();
-        System.out.println("show me!--------------------------> : " + numberOfUpdates);
     }
 }

@@ -29,8 +29,7 @@ public class InventorySystem {
         itemsList.add(ItemDTOProduct7);
 
         InventorySystem.itemsList = itemsList;
-        //String itemList = arrayListToString(itemsList);
-        //System.out.println(itemList);
+
     }
 
     /**

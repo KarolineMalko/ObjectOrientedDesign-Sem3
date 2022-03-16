@@ -1,12 +1,10 @@
 package controller;
 
-import DTO.ReceiptItemsDTO;
+
 import model.ExceptionNotFountItem;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
 
 public class TestControllerAddingItem {
     public Controller ctr = new Controller();
