@@ -6,17 +6,17 @@ import DTO.ReceiptItemsDTO;
 import java.util.ArrayList;
 
 public class Sale {
+    ArrayList<ReceiptItemsDTO> receiptItemsDTOS = new ArrayList<>();
 
     /**
      * this function is responsible for adding the current item to the receipt item list, it handle if there is no item is not on the list,
      * if the current item is not on the list and if the current item is already in the list.
      *
-     * @param receiptItemsDTOS
+     *
      * @param itemInfo
-     * @param receipt
      * @return it returns the list of the items and the info of them.
      */
-    public ArrayList<ReceiptItemsDTO> addItemsToListAndCalculatePrice(ArrayList<ReceiptItemsDTO> receiptItemsDTOS, ItemDTO itemInfo, Receipt receipt){
+    public ArrayList<ReceiptItemsDTO> addItemsToListAndCalculatePrice(ItemDTO itemInfo){
         ReceiptItemsDTO receiptItemsDTO;
         if(receiptItemsDTOS.size() != 0) {
             if(!(checkIfItemAlreadyInReceipt(itemInfo,receiptItemsDTOS) == -1)){
@@ -44,6 +44,14 @@ public class Sale {
             System.out.println(receiptItemDtoToString(receiptItemsDTO));
             return receiptItemsDTOS;
         }
+    }
+
+    public ArrayList<ReceiptItemsDTO> returnReceiptItemsDTO(){
+        return this.receiptItemsDTOS;
+    }
+
+    public void resetReceiptItemsDTO() {
+        this.receiptItemsDTOS = new ArrayList<>();
     }
 
     /**

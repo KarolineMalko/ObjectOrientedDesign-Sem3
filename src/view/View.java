@@ -41,7 +41,7 @@ public class View {
                     try {
                         String userInput = br.readLine();
                         if (userInput.equals("No") | userInput.equals("no")) {
-                            controller.createReceiptAndShowPrice(itemsList);
+                            controller.createReceiptAndShowPrice();
                             while (true) {
                                 System.out.println("Enter the amount payed: ");
                                 String userPayment = br.readLine();

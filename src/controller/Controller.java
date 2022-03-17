@@ -7,6 +7,7 @@ import integration.InventorySystem;
 import model.*;
 
 
+import java.awt.image.AreaAveragingScaleFilter;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -25,7 +26,7 @@ public class Controller {
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     String dateTimeString = now.format(formatter);
     public ArrayList<ItemDTO> itemsList = new ArrayList<>();
-    public ArrayList<ReceiptItemsDTO> receiptItemsDTOS = new ArrayList<>();
+    //public ArrayList<ReceiptItemsDTO> receiptItemsDTOS = new ArrayList<>();
     public ReceiptItemsDTO receiptItemsDTO;
     public Receipt receipt;
     public ReceiptDTO receiptDTO;
@@ -64,7 +65,7 @@ public class Controller {
             ItemDTO itemInfo = inventorySystem.itemInfo(i);
             this.itemInfo = inventorySystem.itemInfo(i);
 
-            return sale.addItemsToListAndCalculatePrice(receiptItemsDTOS, itemInfo, receipt);
+            return sale.addItemsToListAndCalculatePrice(itemInfo);
         }
         return null;
     }
@@ -73,9 +74,10 @@ public class Controller {
     /**
      * this function add the price of every item to create the total price for the receipt.
      * it creates the receipt and adds the total price to it.
-     * @param receiptItemsDTOS
+     *
      */
-    public void createReceiptAndShowPrice(ArrayList<ReceiptItemsDTO> receiptItemsDTOS){
+    public void createReceiptAndShowPrice(){
+        ArrayList<ReceiptItemsDTO> receiptItemsDTOS = sale.returnReceiptItemsDTO();
         for (ReceiptItemsDTO itemsDTO : receiptItemsDTOS) {
 
             this.price += itemsDTO.getPrice();
@@ -86,15 +88,19 @@ public class Controller {
     }
 
     public void resetReceipt(){
+        //ArrayList<ReceiptItemsDTO> receiptItemsDTOS = sale.returnReceiptItemsDTO();
+        //ArrayList<ReceiptItemsDTO> receiptItemsDTOS = new ArrayList<>();
         this.now = LocalDateTime.now();
         this.formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         this.dateTimeString = now.format(formatter);
         this.itemsList = new ArrayList<>();
-        this.receiptItemsDTOS = new ArrayList<>();
+        //this.receiptItemsDTOS = new ArrayList<>();
         this.price = 0;
         this.changeToBeReturned = 0;
         this.amountPayment = 0;
-        this.receipt = new Receipt(this.storeName, this.receiptItemsDTOS,
+        sale.resetReceiptItemsDTO();
+        ArrayList<ReceiptItemsDTO> receiptItemsDTOS = sale.returnReceiptItemsDTO();
+        this.receipt = new Receipt(this.storeName, receiptItemsDTOS,
                 this.dateTimeString, this.price,this.amountPayment, this.changeToBeReturned);
         //emptyObservers();
 
