@@ -12,11 +12,12 @@ public class TotalRevenueViewRevenue implements RegisterObserver {
 
 
     public TotalRevenueViewRevenue(){
-        this.registryUpdates = new ArrayList<Integer>();
+        this.registryUpdates = new ArrayList<>();
     }
     @Override
-    public void newRegistryUpdate(int updatedAmountInReg){
-        registryUpdates.add(updatedAmountInReg);
+    public void newSale(int updatedAmountInReg){
 
+        registryUpdates.add(updatedAmountInReg);
+        System.out.println(" total money in registry =  " + updatedAmountInReg + "   Sale number:" +registryUpdates.size());
     }
 }

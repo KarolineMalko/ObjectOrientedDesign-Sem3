@@ -19,6 +19,7 @@ public class Controller {
     String storeName = "Sky Supermarket  \nStorgatan 3 \n15435 Stockholm ";
 
     Registry registry = new Registry();
+    Sale sale;
     ItemDTO itemInfo;
     LocalDateTime now = LocalDateTime.now();
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -33,11 +34,14 @@ public class Controller {
     int amountPayment;
     int updatedAmountInReg;
     private ArrayList<RegisterObserver> observers;
+    InventorySystem inventorySystem;
 
 
 
     public Controller(){
-
+        this.inventorySystem = new InventorySystem();
+        this.sale = new Sale();
+        this.observers = new ArrayList<>();
     }
 
 
@@ -45,7 +49,6 @@ public class Controller {
      * this function run the function createItemList in the InventorySystem which creates the Item list of the store stock.
      */
     public void runTheInventorySystem(){
-        InventorySystem.createItemList();
 
     }
 
@@ -57,14 +60,13 @@ public class Controller {
      * @return array list of receiptItemsDto.
      */
     public ArrayList<ReceiptItemsDTO> enterItem(int i) throws ExceptionNotFountItem {
-        if(InventorySystem.itemInfo(i) == null) {
-            throw new ExceptionNotFountItem("The item was not found in the stock!");
-        }else {
-        ItemDTO itemInfo = InventorySystem.itemInfo(i);
-        this.itemInfo = InventorySystem.itemInfo(i);
-        Sale sale = new Sale();
-        return sale.addItemsToListAndCalculatePrice(receiptItemsDTOS, itemInfo, receipt);}
+        if(inventorySystem.itemInfo(i) != null) {
+            ItemDTO itemInfo = inventorySystem.itemInfo(i);
+            this.itemInfo = inventorySystem.itemInfo(i);
 
+            return sale.addItemsToListAndCalculatePrice(receiptItemsDTOS, itemInfo, receipt);
+        }
+        return null;
     }
 
 
@@ -94,7 +96,7 @@ public class Controller {
         this.amountPayment = 0;
         this.receipt = new Receipt(this.storeName, this.receiptItemsDTOS,
                 this.dateTimeString, this.price,this.amountPayment, this.changeToBeReturned);
-        emptyObservers();
+        //emptyObservers();
 
     }
 
@@ -145,6 +147,8 @@ public class Controller {
     public void updateRegAmount() {
         this.updatedAmountInReg = registry.getAmountMoneyInReg() + receiptDTO.getTotalPrice();
         registry.setRegistryAmount(updatedAmountInReg);
+        //System.out.println(observers.size());
+        //observers.get(0).newSale(this.updatedAmountInReg);
         notifyObserver();
     }
 
@@ -154,7 +158,7 @@ public class Controller {
 
     private void notifyObserver(){
         for(RegisterObserver obs : observers){
-            obs.newRegistryUpdate(this.updatedAmountInReg);
+            obs.newSale(this.updatedAmountInReg);
         }
     }
 

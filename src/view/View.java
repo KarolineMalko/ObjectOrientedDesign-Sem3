@@ -4,6 +4,7 @@ import DTO.ReceiptItemsDTO;
 import controller.Controller;
 import model.ExceptionNotFountItem;
 import model.FileLogger;
+import model.RegisterObserver;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -12,17 +13,21 @@ import java.util.ArrayList;
 
 public class View {
 
+    Controller controller;
     FileLogger fileLogger = new FileLogger();
     public ArrayList<ReceiptItemsDTO> itemsList = new ArrayList<>();
+    //RegisterObserver registerObserver;
 
 
 
     public View(Controller controller) throws IOException {
-        startUp(controller);
+        this.controller = controller;
+        this.controller.addObserver(new TotalRevenueViewRevenue());
     }
 
     public void startUp(Controller controller) throws IOException {
         try {
+
             controller.setRegistryMoney();
             controller.runTheInventorySystem();
             while(true) {
@@ -46,6 +51,7 @@ public class View {
                                         controller.showReceipt();
                                         System.out.println(" \n \n ");
                                         controller.updateRegAmount();
+
                                         i = 1;
                                         break;
                                     } else {

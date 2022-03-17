@@ -1,6 +1,7 @@
 package integration;
 
 import DTO.ItemDTO;
+import model.ExceptionNotFountItem;
 
 import java.util.ArrayList;
 
@@ -11,7 +12,7 @@ public class InventorySystem {
     /**
      * it create an arraylist containing the items of the store stock and the info of them.
      */
-    public static void createItemList() {
+    public InventorySystem() {
         ArrayList<ItemDTO> itemsList = new ArrayList<ItemDTO>();
         ItemDTO itemDTOProduct1 = new ItemDTO(1, 15, " Milk 1 liter", 0.25);
         ItemDTO ItemDTOProduct2 = new ItemDTO(2, 25, "Tomato 1 bag", 0.25);
@@ -37,12 +38,12 @@ public class InventorySystem {
      * @param id  the id of the item which is antered by the user.
      * @return it returns ItemDTO which contains the item info.
      */
-    public static ItemDTO itemInfo(int id){
+    public  ItemDTO itemInfo(int id) throws ExceptionNotFountItem {
         for(int j = 0; j < itemsList.size(); j++) {
             if (itemsList.get(j).getId() == id){
                 return itemsList.get(j);
             }
         }
-        return null;
+        throw new ExceptionNotFountItem("The item was not found in the stock!");
     }
 }
